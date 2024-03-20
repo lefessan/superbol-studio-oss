@@ -496,7 +496,10 @@ let fold_literal_opt (v: _ #folder) = fold_option ~fold:fold_literal v
 let fold_literal'_opt (v: _ #folder) = fold_option ~fold:fold_literal' v
 let fold_ident' (v: _ #folder) = fold' ~fold:fold_ident v
 let fold_ident'_opt (v: _ #folder) = fold_option ~fold:fold_ident' v
-
+let fold_ident_or_nonnum' (v: _ #folder) =
+  fold' ~fold:fold_ident_or_nonnum v
+let fold_ident_or_nonnum'opt (v: _ #folder) =
+  fold_option ~fold:fold_ident_or_nonnum' v
 (* --- *)
 
 let fold_procedure_name (v: _ #folder) =

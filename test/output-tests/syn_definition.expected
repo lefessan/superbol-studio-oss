@@ -44,7 +44,7 @@ syn_definition.at-145-containing-prog.cob:17.31:
   16              STOP RUN.
   17 >        END PROGRAM      prog-2.
 ----                                  ^
->> Hint: Missing END PROGRAM <word> .
+>> Hint: Missing END PROGRAM .
 
 syn_definition.at-145-containing-prog.cob:18.0:
   15          PROCEDURE        DIVISION.
@@ -242,7 +242,7 @@ syn_definition.at-1462-prog.cob:13.24:
   12   
   13 >        END PROGRAM prog.
 ----                           ^
->> Hint: Missing END PROGRAM <word> . END PROGRAM <word> .
+>> Hint: Missing END PROGRAM . END PROGRAM .
 
 syn_definition.at-1462-prog.cob:14.0:
   11          PROGRAM-ID. prog-3.

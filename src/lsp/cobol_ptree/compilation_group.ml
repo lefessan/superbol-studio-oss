@@ -28,7 +28,7 @@ type program_unit =
     program_env: environment_division with_loc option;
     program_data: data_division with_loc option;
     program_proc: procedure_division with_loc option;
-    program_end_name: name with_loc option
+    program_end_name: ident_or_nonnum with_loc option
   }
 
 and program_level =
@@ -93,7 +93,7 @@ let rec pp_program_unit ppf { program_name;
   Fmt.(option (sp ++ pp_with_loc pp_data_division)) ppf program_data;
   Fmt.(option (sp ++ pp_with_loc pp_procedure_division)) ppf program_proc;
   Fmt.(list ~sep:sp (pp_with_loc pp_program_unit)) ppf nested_programs;
-  Fmt.(option (any "@ @[END PROGRAM@ " ++ pp_with_loc pp_name ++ any ".@]"))
+  Fmt.(option (any "@ @[END PROGRAM@ " ++ pp_with_loc pp_ident_or_nonnum ++ any ".@]"))
     ppf program_end_name
 
 type function_unit =

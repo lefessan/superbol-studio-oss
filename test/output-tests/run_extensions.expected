@@ -1724,7 +1724,7 @@ run_extensions.at-2143-prog.cob:8.18:
 ----                     ^
    9          PROCEDURE        DIVISION.
   10              EXIT PROGRAM.
->> Hint: Missing <word>
+>> Hint: Missing <word> . END PROGRAM
 
 run_extensions.at-2143-prog.cob:8.24-8.32:
    5              CALL "callee"
@@ -1736,18 +1736,40 @@ run_extensions.at-2143-prog.cob:8.24-8.32:
   10              EXIT PROGRAM.
 >> Error: Invalid syntax
 
+run_extensions.at-2143-prog.cob:8.33:
+   5              CALL "callee"
+   6              END-CALL.
+   7              STOP RUN.
+   8 >        PROGRAM-ID.      "callee".
+----                                    ^
+   9          PROCEDURE        DIVISION.
+  10              EXIT PROGRAM.
+>> Hint: Missing END PROGRAM
+
+run_extensions.at-2143-prog.cob:9.7-9.16:
+   6              END-CALL.
+   7              STOP RUN.
+   8          PROGRAM-ID.      "callee".
+   9 >        PROCEDURE        DIVISION.
+----          ^^^^^^^^^
+  10              EXIT PROGRAM.
+  11          END PROGRAM callee.
+>> Error: Invalid syntax
+
+run_extensions.at-2143-prog.cob:10.11-10.15:
+   7              STOP RUN.
+   8          PROGRAM-ID.      "callee".
+   9          PROCEDURE        DIVISION.
+  10 >            EXIT PROGRAM.
+----              ^^^^
+  11          END PROGRAM callee.
+  12          END PROGRAM caller.
+>> Error: Invalid syntax
+
 Considering: import/gnucobol/tests/testsuite.src/run_extensions.at:2166:0
 Considering: import/gnucobol/tests/testsuite.src/run_extensions.at:2213:0
 Considering: import/gnucobol/tests/testsuite.src/run_extensions.at:2210:0
 Considering: import/gnucobol/tests/testsuite.src/run_extensions.at:2279:0
-run_extensions.at-2279-prog.cob:14.18:
-  11          PROCEDURE        DIVISION.
-  12              DISPLAY tally WITH NO ADVANCING.
-  13              GOBACK.
-  14 >        END PROGRAM      nested.
-----                     ^
->> Hint: Missing <word>
-
 run_extensions.at-2279-prog.cob:14.24-14.30:
   11          PROCEDURE        DIVISION.
   12              DISPLAY tally WITH NO ADVANCING.
@@ -1762,7 +1784,7 @@ run_extensions.at-2279-prog.cob:14.31:
   13              GOBACK.
   14 >        END PROGRAM      nested.
 ----                                  ^
->> Hint: Missing END PROGRAM <word> .
+>> Hint: Missing END PROGRAM .
 
 run_extensions.at-2279-prog.cob:15.0:
   12              DISPLAY tally WITH NO ADVANCING.

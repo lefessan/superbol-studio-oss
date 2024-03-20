@@ -297,7 +297,7 @@ let identification_division_header ==
 program_definition [@cost 0]:
  | pd = program_definition_no_end
    pdl = loc(program_definition)* (* COB2002: PROCEDURE DIVISION must be present *)
-   END PROGRAM ep = name "."
+   END PROGRAM ep = loc(ident_or_nonnumeric)? "."
    { match pd.program_level with
        | ProgramDefinition { kind;
                              has_identification_division_header;
@@ -311,7 +311,7 @@ program_definition [@cost 0]:
                                    preliminary_informational_paragraphs;
                                    supplementary_informational_paragraphs;
                                    nested_programs = pdl };
-             program_end_name = Some ep }
+             program_end_name = ep }
        | _ -> failwith "Cannot happen as per the grammar." }
 
 program_definition_no_end:
@@ -343,7 +343,7 @@ program_prototype [@cost 999]:
    edo = ro(loc(environment_division))
    ddo = ro(loc(data_division))
    pdo = ro(loc(procedure_division))
-   END PROGRAM ep = name "."
+   END PROGRAM ep = loc(ident_or_nonnumeric)? "."
    { let _, (program_name, program_as) = pid in
      { program_name;
        program_as;
@@ -352,7 +352,7 @@ program_prototype [@cost 999]:
        program_env = edo;
        program_data = ddo;
        program_proc = pdo;
-       program_end_name = Some ep } }
+       program_end_name = ep } }
 
 function_unit [@cost 999]:
  | fid = function_identification

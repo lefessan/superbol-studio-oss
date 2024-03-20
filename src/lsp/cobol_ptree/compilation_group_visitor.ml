@@ -86,7 +86,8 @@ let rec fold_program_unit (v: _ #folder) =
           | ProgramPrototype -> x
           | ProgramDefinition { nested_programs; _ } ->
               fold_nested_programs v nested_programs x)
-      >> fold_name'_opt v program_end_name                  (* XXX: useful? *)
+      >> fold_ident_or_nonnum'opt v program_end_name
+      (* XXX: useful? *)
     end
 
 and fold_nested_programs (v: _ #folder) =

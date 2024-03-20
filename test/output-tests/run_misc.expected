@@ -4915,26 +4915,6 @@ run_misc.at-11647-prog.cob:21.19-21.25:
   23          DATA DIVISION.
 >> Error: Invalid syntax
 
-run_misc.at-11647-prog.cob:30.18:
-  27          PROCEDURE DIVISION USING x.
-  28               DISPLAY "SUB GOT " X
-  29               END-DISPLAY.
-  30 >        END PROGRAM " SUB".
-----                     ^
-  31   
-  32          IDENTIFICATION DIVISION.
->> Hint: Missing <word>
-
-run_misc.at-11647-prog.cob:30.19-30.25:
-  27          PROCEDURE DIVISION USING x.
-  28               DISPLAY "SUB GOT " X
-  29               END-DISPLAY.
-  30 >        END PROGRAM " SUB".
-----                      ^^^^^^
-  31   
-  32          IDENTIFICATION DIVISION.
->> Error: Invalid syntax
-
 run_misc.at-11647-prog.cob:33.18:
   30          END PROGRAM " SUB".
   31   
@@ -4953,22 +4933,6 @@ run_misc.at-11647-prog.cob:33.19-33.26:
 ----                      ^^^^^^^
   34   
   35          DATA DIVISION.
->> Error: Invalid syntax
-
-run_misc.at-11647-prog.cob:42.18:
-  39          PROCEDURE DIVISION USING x.
-  40               DISPLAY "S U B  GOT " X
-  41               END-DISPLAY.
-  42 >        END PROGRAM "S U B".
-----                     ^
->> Hint: Missing <word>
-
-run_misc.at-11647-prog.cob:42.19-42.26:
-  39          PROCEDURE DIVISION USING x.
-  40               DISPLAY "S U B  GOT " X
-  41               END-DISPLAY.
-  42 >        END PROGRAM "S U B".
-----                      ^^^^^^^
 >> Error: Invalid syntax
 
 Considering: import/gnucobol/tests/testsuite.src/run_misc.at:11696:0
