@@ -21,7 +21,8 @@ let verbose = Engine.verbose
 *)
 
 let revtokens_of_line ~filename ~edit ~config line =
-
+  if config.verbosity > 2 then
+    Printf.eprintf "\n%!";
   let line = String.uppercase_ascii line in
   Lexer.init ();
 
@@ -31,6 +32,9 @@ let revtokens_of_line ~filename ~edit ~config line =
     | COMMENT _ ->
       iter tok_edit rev lexbuf
     | token ->
+      if config.verbosity > 2 then
+        Printf.eprintf "[[%s]]%!" (Lexing.lexeme lexbuf);
+
       let tok_indent = Lexing.lexeme_start lexbuf in
       let tok_length = Lexing.lexeme_end lexbuf - tok_indent in
       let tok = token, {

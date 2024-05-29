@@ -54,6 +54,7 @@ let cobolx_format = {
 
 let default = {
   scan_for_indent = true;
+  verbosity = 1;
 
   source_format = fixed_format ;
   arg_offset = 3 ;

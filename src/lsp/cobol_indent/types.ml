@@ -38,7 +38,12 @@ type source_format = {
 }
 
 type config = {
+
+  (* the scanner currently loses some tokens to improve indentation,
+     for example the name after PROGRAM-ID if it is on the next
+     line. Use this flag to prevent this behavior. *)
   scan_for_indent : bool ;
+  verbosity : int ; (* global verbosity *)
 
   source_format : source_format ;
   arg_offset : int ;
