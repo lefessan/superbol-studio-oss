@@ -38,6 +38,8 @@ type source_format = {
 }
 
 type config = {
+  scan_for_indent : bool ;
+
   source_format : source_format ;
   arg_offset : int ;
   inner_offset : int ;

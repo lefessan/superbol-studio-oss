@@ -98,8 +98,8 @@ let tokens_of_lines ~filename ~config ~contents lines =
         let maybe_comment_entry =
           not config.source_format.free &&
           match revtokens with
-          | (INFORMATION _, _) :: _ -> true
-          | (DOT, _) :: (PROGRAM_ID, _) :: _ -> true
+          | (INFORMATION _, _) :: _ -> config.scan_for_indent
+          | (DOT, _) :: (PROGRAM_ID, _) :: _ -> config.scan_for_indent
           | _ -> false
         in
         if verbose then
