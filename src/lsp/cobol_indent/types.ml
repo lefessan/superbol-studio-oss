@@ -41,7 +41,11 @@ type config = {
 
   (* the scanner currently loses some tokens to improve indentation,
      for example the name after PROGRAM-ID if it is on the next
-     line. Use this flag to prevent this behavior. *)
+     line. Use this flag to prevent this behavior.
+
+     Also, Scanner.skipped_revlines is only filled when this option is
+     set to false.
+*)
   scan_for_indent : bool ;
   verbosity : int ; (* global verbosity *)
 

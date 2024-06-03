@@ -13,6 +13,12 @@
 
 open Types
 
+type result = {
+  toks : (Types.token * Types.token_descr) list ;
+  revedits : Types.indent_record list (* in reverse order *) ;
+  skipped_revlines : int list;
+}
+
 let verbose = Engine.verbose
 
 (* all lines start:
@@ -71,7 +77,7 @@ let get_indent s =
   in
   iter s 0 ( String.length s )
 
-let tokens_of_lines ~filename ~config ~contents lines =
+let tokens_of_lines ~filename ~config ~contents skipped_revlines lines =
   let revedits = ref [] in
 
   let rec iter ~maybe_comment_entry rev lines =
@@ -118,7 +124,10 @@ let tokens_of_lines ~filename ~config ~contents lines =
 
   let tokens = iter [] ~maybe_comment_entry:false lines in
 
-  (tokens, !revedits)
+  { toks = tokens ;
+    revedits = !revedits ;
+    skipped_revlines ;
+  }
 
 let tokenize ~config ~filename ~contents =
 
@@ -130,6 +139,7 @@ let tokenize ~config ~filename ~contents =
     source_format.free source_format.skip_before source_format.skip_after;
 *)
   let lines = ref [] in
+  let skipped_revlines = ref [] in
 
   let max_text_len =
     if source_format.free then
@@ -183,7 +193,10 @@ let tokenize ~config ~filename ~contents =
       | '-' -> iter_in_line true (pos+1) (pos+1) line
       | '*' -> skip_line pos (pos+1) line
       | ' ' -> iter_in_line false (pos+1) (pos+1) line
-      | _ -> skip_line pos (pos+1) line
+      | _ ->
+        if not config.scan_for_indent then
+          skipped_revlines := line :: !skipped_revlines ;
+        skip_line pos (pos+1) line
 
   and iter_in_line cont pos0 pos line =
     (*    Printf.eprintf "iter_in_line\n"; *)
@@ -221,4 +234,4 @@ let tokenize ~config ~filename ~contents =
   iter 0 1;
   let lines = List.rev !lines in
 
-  tokens_of_lines ~filename ~config ~contents lines
+  tokens_of_lines ~filename ~config ~contents !skipped_revlines lines
