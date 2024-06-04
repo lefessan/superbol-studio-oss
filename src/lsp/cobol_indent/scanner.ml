@@ -80,6 +80,13 @@ let get_indent s =
 let tokens_of_lines ~filename ~config ~contents skipped_revlines lines =
   let revedits = ref [] in
 
+  let base_indent =
+    if config.source_format.free then
+      0
+    else
+      1 + config.source_format.skip_before
+  in
+
   let rec iter ~maybe_comment_entry rev lines =
     let has_continuation =
       match lines with
@@ -90,36 +97,41 @@ let tokens_of_lines ~filename ~config ~contents skipped_revlines lines =
 
     | (is_continuation, line_num, pos0, text_len) :: lines ->
 
-      let s = String.sub contents pos0 text_len in
-      let indent = get_indent s in
-      if maybe_comment_entry && indent > 3 then begin
-        if verbose then
-          Printf.eprintf "%04d <<%s>> OUT\n%!" line_num s;
-        iter rev ~maybe_comment_entry:true lines
-      end else
-        let offset_orig = indent - config.whole_file_indent in
-        let edit = { lnum = line_num ;
-                     offset_orig ;
-                     offset_modif = offset_orig ; } in
-        revedits := edit :: !revedits ;
-        let dont_indent_line = is_continuation || has_continuation in
-        let edit =  { bol = not dont_indent_line ; edit } in
-        let revtokens = revtokens_of_line ~edit ~filename ~config s in
-        let maybe_comment_entry =
-          not config.source_format.free &&
-          match revtokens with
-          | (INFORMATION _, _) :: _ -> config.scan_for_indent
-          | (DOT, _) :: (PROGRAM_ID, _) :: _ -> config.scan_for_indent
-          | _ -> false
-        in
-        if verbose then
-          Printf.eprintf "%04d ||%s||%s%s\n%!" line_num s
-            (if dont_indent_line then " SKIPPED" else "")
-            (if maybe_comment_entry then "BEGIN COMMENT ENTRY" else "")
-        ;
-        iter ~maybe_comment_entry ( revtokens @ rev ) lines
+        let s = String.sub contents pos0 text_len in
+        let indent = get_indent s in
+        if maybe_comment_entry && indent > 3 then begin
+          if verbose then
+            Printf.eprintf "%04d <<%s>> OUT\n%!" line_num s;
+          iter rev ~maybe_comment_entry:true lines
+        end else
+          let offset_orig =
+            if config.scan_for_indent then
+              indent - config.whole_file_indent
+            else
+              base_indent + indent
+          in
+          let edit = { lnum = line_num ;
+                       offset_orig ;
+                       offset_modif = offset_orig ; } in
+          revedits := edit :: !revedits ;
+          let dont_indent_line = is_continuation || has_continuation in
+          let edit =  { bol = not dont_indent_line ; edit } in
+          let revtokens = revtokens_of_line ~edit ~filename ~config s in
+          let maybe_comment_entry =
+            not config.source_format.free &&
+            match revtokens with
+            | (INFORMATION _, _) :: _ -> config.scan_for_indent
+            | (DOT, _) :: (PROGRAM_ID, _) :: _ -> config.scan_for_indent
+            | _ -> false
+          in
+          if verbose then
+            Printf.eprintf "%04d ||%s||%s%s\n%!" line_num s
+              (if dont_indent_line then " SKIPPED" else "")
+              (if maybe_comment_entry then "BEGIN COMMENT ENTRY" else "")
+          ;
+          iter ~maybe_comment_entry ( revtokens @ rev ) lines
     | [] ->
-      List.rev rev
+        List.rev rev
   in
 
   let tokens = iter [] ~maybe_comment_entry:false lines in
