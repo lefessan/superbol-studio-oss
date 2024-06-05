@@ -108,7 +108,7 @@ let tokens_of_lines ~filename ~config ~contents skipped_revlines lines =
             if config.scan_for_indent then
               indent - config.whole_file_indent
             else
-              base_indent + indent
+              base_indent
           in
           let edit = { lnum = line_num ;
                        offset_orig ;
